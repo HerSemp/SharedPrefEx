@@ -16,9 +16,11 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     public Button bt_save,bt_display,bt_delete;
     public EditText ed_name,ed_password;
-    public TextView textView;
+    public TextView textView,textView2;
+    public final String SharedDatabase = "myDatabase";
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,12 +31,13 @@ public class MainActivity extends AppCompatActivity {
         ed_name = findViewById(R.id.ed_name);
         ed_password = findViewById(R.id.ed_password);
         textView = findViewById(R.id.textView);
+        textView2 = findViewById(R.id.textVie2);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        String SharedDatabase = "myDatabase";
+
         bt_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,7 +53,22 @@ public class MainActivity extends AppCompatActivity {
         bt_display.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences preferences = getSharedPreferences(SharedDatabase,MODE_PRIVATE);
+                String user = preferences.getString("username","Error: field empty");
+                String passw = preferences.getString("password","Error: field empty");
+                textView2.setText(user);
+                textView.setText(passw);
 
+
+
+            }
+        });
+        bt_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences preferences = getSharedPreferences(SharedDatabase,MODE_PRIVATE);
+                preferences.edit().clear().commit();
+                preferences.edit().apply();
 
             }
         });
